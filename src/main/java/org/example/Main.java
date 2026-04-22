@@ -1,6 +1,7 @@
 package org.example;
 
 import dao.ClienteDAO;
+import dao.DetallePedidoDAO;
 import dao.PedidoDAO;
 import dao.ProductoDAO;
 import model.Cliente;
@@ -39,6 +40,7 @@ public class Main {
         ProductoDAO productoDAO = new ProductoDAO();
         ClienteDAO clienteDAO = new ClienteDAO();
         PedidoDAO pedidoDAO = new PedidoDAO();
+        DetallePedidoDAO detalleDAO = new DetallePedidoDAO();
 
         int opcion;
 
@@ -52,7 +54,9 @@ public class Main {
             System.out.println("6. Listar clientes");
             System.out.println("7. Crear pedido");
             System.out.println("8. Ver pedidos con cliente");
-            System.out.println("9. Salir");
+            System.out.println("9. Añadir producto a pedido");
+            System.out.println("10. Ver detalle de pedidos");
+            System.out.println("11. Salir");
             opcion = readInt(sc, "Elige una opción: ");
 
             switch (opcion) {
@@ -118,7 +122,27 @@ public class Main {
                     pedidoDAO.listarPedidosConCliente();
                     break;
 
+
                 case 9:
+                    System.out.print("ID pedido: ");
+                    int pedidoId = sc.nextInt();
+
+                    System.out.print("ID producto: ");
+                    int productoId = sc.nextInt();
+
+                    System.out.print("Cantidad: ");
+                    int cantidad = sc.nextInt();
+                    sc.nextLine();
+
+                    detalleDAO.agregarProductoAPedido(pedidoId, productoId, cantidad);
+                    break;
+
+                case 10:
+                    detalleDAO.verDetallePedidos();
+                    break;
+
+
+                case 11:
                     System.out.println("Saliendo del programa...");
                     break;
 

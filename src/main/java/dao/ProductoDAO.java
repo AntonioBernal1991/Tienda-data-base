@@ -16,17 +16,25 @@ public class ProductoDAO {
         String sql = "INSERT INTO productos (nombre, precio, stock) VALUES (?, ?, ?)";
 
         try (Connection con = ConexionBD.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, producto.getNombre());
             ps.setDouble(2, producto.getPrecio());
             ps.setInt(3, producto.getStock());
 
             ps.executeUpdate();
-            System.out.println("Producto insertado correctamente.");
+
+            try (ResultSet claves = ps.getGeneratedKeys()) {
+                if (claves.next()) {
+                    producto.setId(claves.getInt(1));
+                }
+            }
+
+            System.out.println("Producto insertado correctamente con id " + producto.getId() + ".");
 
         } catch (SQLException e) {
             System.out.println("Error al insertar producto: " + e.getMessage());
+            throw new RuntimeException("Error al insertar producto: " + e.getMessage(), e);
         }
     }
 
@@ -55,7 +63,34 @@ public class ProductoDAO {
         return lista;
     }
 
-    public void actualizarProducto(Producto producto) {
+    public Producto buscarPorId(int id) {
+        String sql = "SELECT * FROM productos WHERE id = ?";
+
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Producto(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getDouble("precio"),
+                            rs.getInt("stock")
+                    );
+                }
+            }
+
+            return null;
+
+        } catch (SQLException e) {
+            System.out.println("Error al buscar producto: " + e.getMessage());
+            throw new RuntimeException("Error al buscar producto: " + e.getMessage(), e);
+        }
+    }
+
+    public boolean actualizarProducto(Producto producto) {
         String sql = "UPDATE productos SET nombre = ?, precio = ?, stock = ? WHERE id = ?";
 
         try (Connection con = ConexionBD.getConnection();
@@ -70,16 +105,19 @@ public class ProductoDAO {
 
             if (filas > 0) {
                 System.out.println("Producto actualizado correctamente.");
+                return true;
             } else {
                 System.out.println("No existe un producto con ese id.");
+                return false;
             }
 
         } catch (SQLException e) {
             System.out.println("Error al actualizar producto: " + e.getMessage());
+            throw new RuntimeException("Error al actualizar producto: " + e.getMessage(), e);
         }
     }
 
-    public void eliminarProducto(int id) {
+    public boolean eliminarProducto(int id) {
         String sql = "DELETE FROM productos WHERE id = ?";
 
         try (Connection con = ConexionBD.getConnection();
@@ -91,12 +129,15 @@ public class ProductoDAO {
 
             if (filas > 0) {
                 System.out.println("Producto eliminado correctamente.");
+                return true;
             } else {
                 System.out.println("No existe un producto con ese id.");
+                return false;
             }
 
         } catch (SQLException e) {
             System.out.println("Error al eliminar producto: " + e.getMessage());
+            throw new RuntimeException("Error al eliminar producto: " + e.getMessage(), e);
         }
     }
 }
