@@ -17,6 +17,9 @@ public class MainController {
     private Button btnClientes;
 
     @FXML
+    private Button btnPedidos;
+
+    @FXML
     private void onAbrirProductos() {
         abrirVista("/org/example/ui/ProductView.fxml", "Productos", btnProductos);
     }
@@ -26,15 +29,18 @@ public class MainController {
         abrirVista("/org/example/ui/ClientView.fxml", "Clientes", btnClientes);
     }
 
+    @FXML
+    private void onAbrirPedidos() {
+        abrirVista("/org/example/ui/OrderView.fxml", "Pedidos", btnPedidos);
+    }
+
     private void abrirVista(String rutaFxml, String titulo, Node origen) {
         try {
             FXMLLoader fxml = new FXMLLoader(getClass().getResource(rutaFxml));
             Scene scene = new Scene(fxml.load());
 
             Stage stage = (Stage) origen.getScene().getWindow();
-            stage.setTitle(titulo);
-            stage.setScene(scene);
-            stage.show();
+            WindowUtil.applyWindowSettings(stage, scene, titulo);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

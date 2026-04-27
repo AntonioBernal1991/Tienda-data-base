@@ -47,6 +47,7 @@ public class ProductController {
 
     @FXML
     private void initialize() {
+        tablaProductos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
@@ -62,19 +63,40 @@ public class ProductController {
 
     @FXML
     private void onVolver() {
+        onIrInicio();
+    }
+
+    @FXML
+    private void onIrInicio() {
+        abrirVista("/org/example/ui/MainView.fxml", "Tienda");
+    }
+
+    @FXML
+    private void onIrProductos() {
+        abrirVista("/org/example/ui/ProductView.fxml", "Productos");
+    }
+
+    @FXML
+    private void onIrClientes() {
+        abrirVista("/org/example/ui/ClientView.fxml", "Clientes");
+    }
+
+    @FXML
+    private void onIrPedidos() {
+        abrirVista("/org/example/ui/OrderView.fxml", "Pedidos");
+    }
+
+    private void abrirVista(String rutaFxml, String titulo) {
         try {
-            FXMLLoader fxml = new FXMLLoader(
-                    getClass().getResource("/org/example/ui/MainView.fxml"));
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(rutaFxml));
             Scene scene = new Scene(fxml.load());
 
             Stage stage = (Stage) tablaProductos.getScene().getWindow();
-            stage.setTitle("Tienda");
-            stage.setScene(scene);
-            stage.show();
+            WindowUtil.applyWindowSettings(stage, scene, titulo);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("No se pudo volver al menú principal");
+            alert.setHeaderText("No se pudo abrir la vista: " + titulo);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }

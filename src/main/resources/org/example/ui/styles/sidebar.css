@@ -1,0 +1,11 @@
+.sidebar-button {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.sidebar-button:hover {
+    -fx-font-size: 24px;
+}

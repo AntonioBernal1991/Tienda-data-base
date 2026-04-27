@@ -30,10 +30,16 @@ public class ClientController {
     private TableColumn<Cliente, String> colEmail;
 
     @FXML
+    private TableColumn<Cliente, String> colCiudad;
+
+    @FXML
     private TextField txtNombre;
 
     @FXML
     private TextField txtEmail;
+
+    @FXML
+    private TextField txtCiudad;
 
     @FXML
     private TextField txtId;
@@ -42,9 +48,11 @@ public class ClientController {
 
     @FXML
     private void initialize() {
+        tablaClientes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colCiudad.setCellValueFactory(new PropertyValueFactory<>("ciudad"));
 
         cargarClientes();
     }
@@ -56,19 +64,40 @@ public class ClientController {
 
     @FXML
     private void onVolver() {
+        onIrInicio();
+    }
+
+    @FXML
+    private void onIrInicio() {
+        abrirVista("/org/example/ui/MainView.fxml", "Tienda");
+    }
+
+    @FXML
+    private void onIrProductos() {
+        abrirVista("/org/example/ui/ProductView.fxml", "Productos");
+    }
+
+    @FXML
+    private void onIrClientes() {
+        abrirVista("/org/example/ui/ClientView.fxml", "Clientes");
+    }
+
+    @FXML
+    private void onIrPedidos() {
+        abrirVista("/org/example/ui/OrderView.fxml", "Pedidos");
+    }
+
+    private void abrirVista(String rutaFxml, String titulo) {
         try {
-            FXMLLoader fxml = new FXMLLoader(
-                    getClass().getResource("/org/example/ui/MainView.fxml"));
+            FXMLLoader fxml = new FXMLLoader(getClass().getResource(rutaFxml));
             Scene scene = new Scene(fxml.load());
 
             Stage stage = (Stage) tablaClientes.getScene().getWindow();
-            stage.setTitle("Tienda");
-            stage.setScene(scene);
-            stage.show();
+            WindowUtil.applyWindowSettings(stage, scene, titulo);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setHeaderText("No se pudo volver al menú principal");
+            alert.setHeaderText("No se pudo abrir la vista: " + titulo);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
@@ -78,10 +107,11 @@ public class ClientController {
     private void onAnadirCliente() {
         String nombre = txtNombre.getText() == null ? "" : txtNombre.getText().trim();
         String email = txtEmail.getText() == null ? "" : txtEmail.getText().trim();
+        String ciudad = txtCiudad.getText() == null ? "" : txtCiudad.getText().trim();
 
-        if (nombre.isEmpty() || email.isEmpty()) {
+        if (nombre.isEmpty() || email.isEmpty() || ciudad.isEmpty()) {
             mostrarAviso("Campos incompletos",
-                    "Debes rellenar nombre y email antes de añadir el cliente.");
+                    "Debes rellenar nombre, email y ciudad antes de añadir el cliente.");
             return;
         }
 
@@ -92,7 +122,7 @@ public class ClientController {
         }
 
         try {
-            Cliente nuevo = new Cliente(nombre, email);
+            Cliente nuevo = new Cliente(nombre, email, ciudad);
             clienteDAO.insertarCliente(nuevo);
 
             cargarClientes();
@@ -101,6 +131,80 @@ public class ClientController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("No se pudo añadir el cliente");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void onActualizarCliente() {
+        String idTexto = txtId.getText() == null ? "" : txtId.getText().trim();
+        if (idTexto.isEmpty()) {
+            mostrarAviso("Campo ID vacío",
+                    "Debes introducir el ID del cliente que quieres actualizar.");
+            return;
+        }
+
+        int id;
+        try {
+            id = Integer.parseInt(idTexto);
+        } catch (NumberFormatException e) {
+            mostrarAviso("ID no válido", "El ID debe ser un número entero.");
+            return;
+        }
+
+        Cliente existente;
+        try {
+            existente = clienteDAO.buscarPorId(id);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No se pudo buscar el cliente");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+
+        if (existente == null) {
+            mostrarAviso("Cliente no encontrado",
+                    "No existe ningún cliente con el ID " + id + ".");
+            return;
+        }
+
+        String nombreTexto = txtNombre.getText() == null ? "" : txtNombre.getText().trim();
+        String emailTexto = txtEmail.getText() == null ? "" : txtEmail.getText().trim();
+        String ciudadTexto = txtCiudad.getText() == null ? "" : txtCiudad.getText().trim();
+
+        if (nombreTexto.isEmpty() && emailTexto.isEmpty() && ciudadTexto.isEmpty()) {
+            mostrarAviso("Sin cambios",
+                    "Rellena al menos nombre, email o ciudad para actualizar.");
+            return;
+        }
+
+        if (!emailTexto.isEmpty() && (!emailTexto.contains("@") || !emailTexto.contains("."))) {
+            mostrarAviso("Email no válido",
+                    "Introduce un email con formato correcto (ej. usuario@dominio.com).");
+            return;
+        }
+
+        String nuevoNombre = nombreTexto.isEmpty() ? existente.getNombre() : nombreTexto;
+        String nuevoEmail = emailTexto.isEmpty() ? existente.getEmail() : emailTexto;
+        String nuevaCiudad = ciudadTexto.isEmpty() ? existente.getCiudad() : ciudadTexto;
+
+        try {
+            Cliente actualizado = new Cliente(id, nuevoNombre, nuevoEmail, nuevaCiudad);
+            boolean ok = clienteDAO.actualizarCliente(actualizado);
+            if (ok) {
+                cargarClientes();
+                limpiarCampos();
+            } else {
+                mostrarAviso("Sin cambios",
+                        "No se ha podido actualizar el cliente con ID " + id + ".");
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No se pudo actualizar el cliente");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
@@ -122,6 +226,7 @@ public class ClientController {
     private void limpiarCampos() {
         txtNombre.clear();
         txtEmail.clear();
+        txtCiudad.clear();
         if (txtId != null) {
             txtId.clear();
         }

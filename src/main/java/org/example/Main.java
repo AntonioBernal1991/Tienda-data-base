@@ -34,6 +34,20 @@ public class Main {
         }
     }
 
+    private static boolean readYesNo(Scanner sc, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String s = sc.nextLine().trim().toLowerCase();
+            if (s.equals("s") || s.equals("si") || s.equals("sí") || s.equals("y") || s.equals("yes")) {
+                return true;
+            }
+            if (s.equals("n") || s.equals("no")) {
+                return false;
+            }
+            System.out.println("Respuesta no válida. Escribe 's' o 'n'.");
+        }
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -54,9 +68,8 @@ public class Main {
             System.out.println("6. Listar clientes");
             System.out.println("7. Crear pedido");
             System.out.println("8. Ver pedidos con cliente");
-            System.out.println("9. Añadir producto a pedido");
-            System.out.println("10. Ver detalle de pedidos");
-            System.out.println("11. Salir");
+            System.out.println("9. Ver detalle de pedidos");
+            System.out.println("10. Salir");
             opcion = readInt(sc, "Elige una opción: ");
 
             switch (opcion) {
@@ -102,8 +115,10 @@ public class Main {
                     String nombreCliente = sc.nextLine();
                     System.out.print("Email del cliente: ");
                     String email = sc.nextLine();
+                    System.out.print("Ciudad del cliente: ");
+                    String ciudad = sc.nextLine();
 
-                    clienteDAO.insertarCliente(new Cliente(nombreCliente, email));
+                    clienteDAO.insertarCliente(new Cliente(nombreCliente, email, ciudad));
                     break;
 
                 case 6:
@@ -115,34 +130,40 @@ public class Main {
 
                 case 7:
                     int clienteId = readInt(sc, "ID del cliente para crear el pedido: ");
-                    pedidoDAO.crearPedido(clienteId);
+                    int pedidoId = pedidoDAO.crearPedido(clienteId);
+
+                    if (pedidoId <= 0) {
+                        System.out.println("No se pudo crear el pedido, se cancela la adición de productos.");
+                        break;
+                    }
+
+                    System.out.println("\n--- PRODUCTOS DISPONIBLES ---");
+                    for (Producto p : productoDAO.listarProductos()) {
+                        System.out.println(p);
+                    }
+
+                    boolean seguir = true;
+                    while (seguir) {
+                        int productoId = readInt(sc, "ID del producto a añadir al pedido: ");
+                        int cantidad = readInt(sc, "Cantidad: ");
+
+                        detalleDAO.agregarProductoAPedido(pedidoId, productoId, cantidad);
+
+                        seguir = readYesNo(sc, "¿Añadir otro producto al pedido? (s/n): ");
+                    }
+
+                    System.out.println("Pedido " + pedidoId + " finalizado.");
                     break;
 
                 case 8:
                     pedidoDAO.listarPedidosConCliente();
                     break;
 
-
                 case 9:
-                    System.out.print("ID pedido: ");
-                    int pedidoId = sc.nextInt();
-
-                    System.out.print("ID producto: ");
-                    int productoId = sc.nextInt();
-
-                    System.out.print("Cantidad: ");
-                    int cantidad = sc.nextInt();
-                    sc.nextLine();
-
-                    detalleDAO.agregarProductoAPedido(pedidoId, productoId, cantidad);
-                    break;
-
-                case 10:
                     detalleDAO.verDetallePedidos();
                     break;
 
-
-                case 11:
+                case 10:
                     System.out.println("Saliendo del programa...");
                     break;
 
@@ -150,7 +171,7 @@ public class Main {
                     System.out.println("Opción no válida.");
             }
 
-        } while (opcion != 9);
+        } while (opcion != 10);
 
         sc.close();
     }
