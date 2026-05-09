@@ -3,24 +3,33 @@ package org.example.ui;
 import dao.ClienteDAO;
 import dao.PedidoDAO;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import model.Cliente;
 import model.PedidoClienteView;
 
+import java.time.YearMonth;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class OrderController {
+
     @FXML
     private TableView<PedidoClienteView> tablaPedidos;
 
@@ -42,8 +51,26 @@ public class OrderController {
     @FXML
     private ComboBox<Integer> cmbPedidoId;
 
+    @FXML
+    private TextField txtBuscar;
+
+    @FXML
+    private Label lblKpiTotal;
+
+    @FXML
+    private Label lblKpiClientes;
+
+    @FXML
+    private Label lblKpiCiudades;
+
+    @FXML
+    private Label lblKpiEsteMes;
+
     private final PedidoDAO pedidoDAO = new PedidoDAO();
     private final ClienteDAO clienteDAO = new ClienteDAO();
+
+    private final ObservableList<PedidoClienteView> todosLosPedidos = FXCollections.observableArrayList();
+    private FilteredList<PedidoClienteView> pedidosFiltrados;
 
     @FXML
     private void initialize() {
@@ -54,10 +81,14 @@ public class OrderController {
             colCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
             colCiudad.setCellValueFactory(new PropertyValueFactory<>("ciudad"));
 
-            cargarPedidos();
+            pedidosFiltrados = new FilteredList<>(todosLosPedidos, p -> true);
+            tablaPedidos.setItems(pedidosFiltrados);
+
+            txtBuscar.textProperty().addListener((obs, oldVal, newVal) -> aplicarFiltroBusqueda(newVal));
+
             configurarVisualizacionCombos();
+            cargarPedidos();
             cargarClientesEnCombo();
-            cargarIdsPedidosEnCombo();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -67,10 +98,82 @@ public class OrderController {
         }
     }
 
+    private void aplicarFiltroBusqueda(String consulta) {
+        String needle = consulta == null ? "" : consulta.trim().toLowerCase();
+        pedidosFiltrados.setPredicate(p -> {
+            if (needle.isEmpty()) {
+                return true;
+            }
+            if (String.valueOf(p.getPedidoId()).contains(needle)) {
+                return true;
+            }
+            if (contiene(p.getCliente(), needle)) {
+                return true;
+            }
+            if (contiene(p.getCiudad(), needle)) {
+                return true;
+            }
+            if (p.getFecha() != null && p.getFecha().toString().toLowerCase().contains(needle)) {
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private static boolean contiene(String texto, String needle) {
+        return texto != null && texto.toLowerCase().contains(needle);
+    }
+
+    private void actualizarKpis() {
+        List<PedidoClienteView> datos = List.copyOf(todosLosPedidos);
+        lblKpiTotal.setText(String.valueOf(datos.size()));
+
+        Set<String> clientes = new HashSet<>();
+        Set<String> ciudades = new HashSet<>();
+        YearMonth mesActual = YearMonth.now();
+        int esteMes = 0;
+
+        for (PedidoClienteView p : datos) {
+            String c = p.getCliente();
+            if (c != null && !c.isBlank()) {
+                clientes.add(c.trim());
+            }
+            String ciudad = p.getCiudad();
+            if (ciudad != null && !ciudad.isBlank()) {
+                ciudades.add(ciudad.trim());
+            }
+            if (p.getFecha() != null) {
+                if (YearMonth.from(p.getFecha().toLocalDate()).equals(mesActual)) {
+                    esteMes++;
+                }
+            }
+        }
+
+        lblKpiClientes.setText(String.valueOf(clientes.size()));
+        lblKpiCiudades.setText(String.valueOf(ciudades.size()));
+        lblKpiEsteMes.setText(String.valueOf(esteMes));
+    }
+
+    @FXML
+    private void onExportar() {
+        Alert info = new Alert(Alert.AlertType.INFORMATION);
+        info.setTitle("Exportar");
+        info.setHeaderText(null);
+        info.setContentText("Exportación a archivo no está implementada en esta versión de demo.");
+        info.showAndWait();
+    }
+
+    @FXML
+    private void onNuevoPedido() {
+        limpiarCampos();
+        if (cmbClienteId != null) {
+            cmbClienteId.requestFocus();
+        }
+    }
+
     @FXML
     private void onListarPedidos() {
         cargarPedidos();
-        cargarIdsPedidosEnCombo();
     }
 
     @FXML
@@ -91,7 +194,6 @@ public class OrderController {
 
             cargarPedidos();
             cargarClientesEnCombo();
-            cargarIdsPedidosEnCombo();
             limpiarCampos();
 
             Alert ok = new Alert(Alert.AlertType.INFORMATION);
@@ -128,7 +230,6 @@ public class OrderController {
                     boolean eliminado = pedidoDAO.eliminarPedidoYReponerStock(pedidoId);
                     if (eliminado) {
                         cargarPedidos();
-                        cargarIdsPedidosEnCombo();
                         limpiarCampos();
 
                         Alert ok = new Alert(Alert.AlertType.INFORMATION);
@@ -168,11 +269,11 @@ public class OrderController {
         }
 
         try {
-            FXMLLoader fxml = new FXMLLoader(
-                    getClass().getResource("/org/example/ui/OrderDetailView.fxml"));
-            Scene scene = new Scene(fxml.load());
+            FXMLLoader loader = FxmlUtil.loadRootAndKeepLoader("/org/example/ui/OrderDetailView.fxml");
+            Parent root = loader.getRoot();
+            Scene scene = new Scene(root);
 
-            OrderDetailController controller = fxml.getController();
+            OrderDetailController controller = loader.getController();
             controller.setPedidoId(pedidoId);
 
             Stage stage = (Stage) tablaPedidos.getScene().getWindow();
@@ -181,14 +282,9 @@ public class OrderController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("No se pudo abrir el detalle del pedido");
-            alert.setContentText(e.getMessage());
+            alert.setContentText(FxmlUtil.causaCadena(e));
             alert.showAndWait();
         }
-    }
-
-    @FXML
-    private void onVolver() {
-        onIrInicio();
     }
 
     @FXML
@@ -213,8 +309,8 @@ public class OrderController {
 
     private void abrirVista(String rutaFxml, String titulo) {
         try {
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource(rutaFxml));
-            Scene scene = new Scene(fxml.load());
+            Parent root = FxmlUtil.loadRoot(rutaFxml);
+            Scene scene = new Scene(root);
 
             Stage stage = (Stage) tablaPedidos.getScene().getWindow();
             WindowUtil.applyWindowSettings(stage, scene, titulo);
@@ -222,7 +318,7 @@ public class OrderController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("No se pudo abrir la vista: " + titulo);
-            alert.setContentText(e.getMessage());
+            alert.setContentText(FxmlUtil.causaCadena(e));
             alert.showAndWait();
         }
     }
@@ -230,7 +326,9 @@ public class OrderController {
     private void cargarPedidos() {
         try {
             List<PedidoClienteView> pedidos = pedidoDAO.listarPedidosResumen();
-            tablaPedidos.setItems(FXCollections.observableArrayList(pedidos));
+            todosLosPedidos.setAll(pedidos);
+            actualizarKpis();
+            cargarIdsPedidosEnCombo();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

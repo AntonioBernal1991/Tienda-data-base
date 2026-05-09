@@ -1,0 +1,251 @@
+/* Vista Productos — estilo dashboard claro (referencia tipo Nexio) */
+
+.product-main {
+    -fx-background-color: #eceef2;
+    /* Base logo ~42px + ~1cm (~38px); +4px ≈ 1mm extra */
+    -fx-padding: 84 36 24 28;
+    -fx-spacing: 18;
+}
+
+.product-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111;
+}
+
+.product-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666;
+}
+
+.panel-side-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #222;
+}
+
+.btn-outline {
+    -fx-background-color: white;
+    -fx-text-fill: #222;
+    -fx-border-color: #d0d4dc;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 18;
+    -fx-cursor: hand;
+}
+
+.btn-outline:hover {
+    -fx-background-color: #f8f9fb;
+}
+
+.btn-primary {
+    -fx-background-color: #111;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 8 18;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #333;
+}
+
+.kpi-row {
+    -fx-spacing: 12;
+}
+
+.kpi-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 14 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 10, 0, 0, 2);
+}
+
+.kpi-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666;
+}
+
+.kpi-value {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111;
+}
+
+.kpi-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888;
+}
+
+.product-toolbar {
+    -fx-spacing: 10;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.product-search {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #d8dce4;
+    -fx-background-color: white;
+    -fx-padding: 8 12;
+}
+
+.product-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.07), 12, 0, 0, 2);
+}
+
+.product-table-panel .table-view {
+    -fx-background-color: white;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.product-table-panel .table-view .column-header-background {
+    -fx-background-color: #fafafa;
+}
+
+.product-table-panel .table-view .column-header .label {
+    -fx-text-fill: #555;
+    -fx-font-size: 12px;
+}
+
+.product-table-panel .table-view .table-cell {
+    -fx-font-size: 13px;
+}
+
+.product-form-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #333;
+}
+
+.product-form-field {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #d8dce4;
+    -fx-background-color: #fafafa;
+    -fx-padding: 6 10;
+    -fx-font-size: 13px;
+}
+
+.combo-box-base.dashboard-field {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #d8dce4;
+    -fx-background-color: #fafafa;
+    -fx-font-size: 13px;
+}
+
+/* Detalle de pedido — badges y tarjetas tipo Nexio */
+
+.detail-order-header {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.detail-cards-row {
+    -fx-spacing: 12;
+}
+
+.detail-info-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 16 18;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 10, 0, 0, 2);
+    -fx-spacing: 8;
+}
+
+.detail-card-title {
+    -fx-font-size: 12px;
+    -fx-text-fill: #888;
+    -fx-font-weight: bold;
+}
+
+.detail-card-strong {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111;
+}
+
+.detail-muted {
+    -fx-font-size: 13px;
+    -fx-text-fill: #555;
+}
+
+.detail-muted-small {
+    -fx-font-size: 12px;
+    -fx-text-fill: #777;
+}
+
+.status-badge {
+    -fx-background-color: #e8f5e9;
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 14;
+    -fx-background-radius: 20;
+}
+
+.status-badge-pending {
+    -fx-background-color: #fff8e1;
+    -fx-text-fill: #f57f17;
+}
+
+.timeline-card {
+    -fx-min-width: 280;
+}
+
+.timeline-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #222;
+}
+
+.timeline-step-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+.timeline-step-time {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888;
+}
+
+.timeline-check {
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.totals-line {
+    -fx-spacing: 8;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.totals-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #555;
+    -fx-min-width: 120;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.totals-value {
+    -fx-font-size: 13px;
+    -fx-text-fill: #111;
+    -fx-min-width: 100;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.totals-grand-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111;
+}
+
+.totals-grand-value {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111;
+}

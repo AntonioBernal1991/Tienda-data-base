@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -12,12 +13,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="1003.0" prefWidth="1720.0" stylesheets="@styles/sidebar.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.ProductController">
+<BorderPane prefHeight="1162.0" prefWidth="2114.0" stylesheets="@styles/sidebar.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.ProductController">
    <left>
       <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="558.0" prefWidth="210.0" spacing="40.0" style="-fx-background-color: black;" BorderPane.alignment="TOP_LEFT">
          <children>
@@ -49,95 +49,122 @@
       <Insets />
    </opaqueInsets>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox spacing="18.0" styleClass="product-main" stylesheets="@styles/product-view.css" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Productos">
-               <font>
-                  <Font name="System Bold" size="34.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="50.0" top="80.0" />
-               </VBox.margin>
-            </Text>
-            <HBox prefHeight="884.0" prefWidth="1485.0" spacing="130.0">
+            <HBox alignment="CENTER_LEFT" spacing="16.0">
                <children>
-                  <TableView fx:id="tablaProductos" maxWidth="1.7976931348623157E308" prefHeight="503.0" prefWidth="613.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-control-inner-background-alt: transparent; -fx-background-insets: 0; -fx-padding: 0; -fx-text-background-color: black; -fx-font-size: 24px; -fx-table-cell-border-color: transparent;">
-                     <columns>
-                        <TableColumn fx:id="colId" prefWidth="70.0" text="ID" />
-                        <TableColumn fx:id="colNombre" prefWidth="220.0" text="Nombre" />
-                        <TableColumn fx:id="colPrecio" prefWidth="140.0" text="Precio" />
-                        <TableColumn fx:id="colStock" prefWidth="183.33333333333337" text="Stock" />
-                     </columns>
-                     <HBox.margin>
-                        <Insets top="300.0" />
-                     </HBox.margin>
-                  </TableView>
-                  <VBox prefHeight="470.0" prefWidth="650.0" spacing="50.0">
+                  <VBox spacing="4.0">
                      <children>
-                        <GridPane alignment="CENTER" hgap="24.0" prefHeight="240.0" prefWidth="560.0" vgap="14.0">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <Label prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 20px;" text="Nombre:" />
-                              <Label prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 20px;" text="Precio:" GridPane.rowIndex="1" />
-                              <Label prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 20px;" text="Stock:" GridPane.rowIndex="2" />
-                              <Label prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 20px;" text="ID:" GridPane.rowIndex="3" />
-                              <TextField fx:id="txtNombre" prefHeight="46.0" prefWidth="300.0" style="-fx-font-size: 20px;" GridPane.columnIndex="1" />
-                              <TextField fx:id="txtPrecio" prefHeight="46.0" prefWidth="300.0" style="-fx-font-size: 20px;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField fx:id="txtStock" prefHeight="46.0" prefWidth="300.0" style="-fx-font-size: 20px;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField fx:id="txtId" prefHeight="46.0" prefWidth="300.0" style="-fx-font-size: 20px;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                           </children>
-                           <padding>
-                              <Insets left="22.0" right="18.0" />
-                           </padding>
-                        </GridPane>
-                        <GridPane alignment="CENTER" hgap="18.0" prefHeight="210.0" prefWidth="500.0" vgap="14.0">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="210.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="210.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#onAnadirProducto" prefHeight="56.0" prefWidth="200.0" style="-fx-font-size: 18px;" text="Añadir">
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                              </Button>
-                              <Button mnemonicParsing="false" onAction="#onActualizarProducto" prefHeight="56.0" prefWidth="200.0" style="-fx-font-size: 18px;" text="Actualizar" GridPane.columnIndex="1" />
-                              <Button mnemonicParsing="false" onAction="#onEliminarProducto" prefHeight="56.0" prefWidth="200.0" style="-fx-font-size: 18px;" text="Eliminar" GridPane.rowIndex="1" />
-                              <Button mnemonicParsing="false" onAction="#onListarProductos" prefHeight="56.0" prefWidth="200.0" style="-fx-font-size: 18px;" text="Listar" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                           </children>
-                           <padding>
-                              <Insets left="14.0" right="14.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets left="70.0" />
-                           </VBox.margin>
-                        </GridPane>
+                        <Label styleClass="product-title" text="Productos" />
+                        <Label maxWidth="680.0" styleClass="product-subtitle" text="Gestiona y consulta todos los productos de tu tienda." wrapText="true" />
                      </children>
-                     <padding>
-                        <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
-                     </padding>
-                     <HBox.margin>
-                        <Insets top="300.0" />
-                     </HBox.margin>
+                  </VBox>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" onAction="#onExportar" styleClass="btn-outline" text="Exportar" />
+                  <Button mnemonicParsing="false" onAction="#onNuevoProducto" styleClass="btn-primary" text="+ Nuevo producto" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="kpi-row">
+               <children>
+                  <VBox maxWidth="Infinity" spacing="6.0" styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="kpi-label" text="Total productos" />
+                        <Label fx:id="lblKpiTotal" styleClass="kpi-value" text="0" />
+                        <Label styleClass="kpi-hint" text="En catálogo" />
+                     </children>
+                  </VBox>
+                  <VBox maxWidth="Infinity" spacing="6.0" styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="kpi-label" text="Con stock" />
+                        <Label fx:id="lblKpiConStock" styleClass="kpi-value" text="0" />
+                        <Label styleClass="kpi-hint" text="Con existencias" />
+                     </children>
+                  </VBox>
+                  <VBox maxWidth="Infinity" spacing="6.0" styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="kpi-label" text="Sin stock" />
+                        <Label fx:id="lblKpiSinStock" styleClass="kpi-value" text="0" />
+                        <Label styleClass="kpi-hint" text="Unidades = 0" />
+                     </children>
+                  </VBox>
+                  <VBox maxWidth="Infinity" spacing="6.0" styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="kpi-label" text="Valor inventario" />
+                        <Label fx:id="lblKpiValor" styleClass="kpi-value" text="0 €" />
+                        <Label styleClass="kpi-hint" text="Suma precio x stock" />
+                     </children>
                   </VBox>
                </children>
-               <padding>
-                  <Insets left="30.0" />
-               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="product-toolbar">
+               <children>
+                  <TextField fx:id="txtBuscar" prefHeight="36.0" prefWidth="340.0" promptText="Buscar por nombre o ID..." styleClass="product-search" />
+                  <ComboBox disable="true" prefHeight="36.0" prefWidth="130.0" promptText="Categoría" />
+                  <ComboBox disable="true" prefHeight="36.0" prefWidth="120.0" promptText="Marca" />
+                  <ComboBox disable="true" prefHeight="36.0" prefWidth="110.0" promptText="Estado" />
+                  <Button disable="true" mnemonicParsing="false" styleClass="btn-outline" text="Filtros" />
+               </children>
+            </HBox>
+            <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" spacing="0.0" styleClass="product-card product-table-panel" HBox.hgrow="ALWAYS">
+                     <children>
+                        <TableView fx:id="tablaProductos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: white; -fx-control-inner-background: white; -fx-control-inner-background-alt: #fafafa; -fx-background-insets: 0; -fx-padding: 0; -fx-text-background-color: black; -fx-font-size: 13px;" VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="colId" prefWidth="88.0" text="ID" />
+                              <TableColumn fx:id="colNombre" prefWidth="260.0" text="Producto" />
+                              <TableColumn fx:id="colPrecio" prefWidth="120.0" text="Precio" />
+                              <TableColumn fx:id="colStock" prefWidth="100.0" text="Stock" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="380.0" minWidth="300.0" prefWidth="350.0" spacing="12.0" styleClass="product-card">
+                     <children>
+                        <Label styleClass="panel-side-title" text="Alta y edición" />
+                        <GridPane alignment="CENTER_LEFT" hgap="12.0" prefWidth="320.0" vgap="10.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="90.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label prefHeight="36.0" styleClass="product-form-label" text="Nombre" />
+                              <Label prefHeight="36.0" styleClass="product-form-label" text="Precio" GridPane.rowIndex="1" />
+                              <Label prefHeight="36.0" styleClass="product-form-label" text="Stock" GridPane.rowIndex="2" />
+                              <Label prefHeight="36.0" styleClass="product-form-label" text="ID" GridPane.rowIndex="3" />
+                              <TextField fx:id="txtNombre" prefHeight="36.0" prefWidth="200.0" styleClass="product-form-field" GridPane.columnIndex="1" />
+                              <TextField fx:id="txtPrecio" prefHeight="36.0" prefWidth="200.0" styleClass="product-form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtStock" prefHeight="36.0" prefWidth="200.0" styleClass="product-form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtId" prefHeight="36.0" prefWidth="200.0" styleClass="product-form-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                        </GridPane>
+                        <Region prefHeight="12.0" />
+                        <GridPane hgap="10.0" prefWidth="320.0" vgap="10.0" VBox.vgrow="NEVER">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="155.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="155.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="42.0" vgrow="NEVER" />
+                              <RowConstraints minHeight="10.0" prefHeight="42.0" vgrow="NEVER" />
+                              <RowConstraints minHeight="10.0" prefHeight="42.0" vgrow="NEVER" />
+                           </rowConstraints>
+                           <children>
+                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAnadirProducto" prefHeight="40.0" styleClass="btn-primary" text="Añadir" GridPane.columnSpan="2" />
+                              <Button mnemonicParsing="false" onAction="#onActualizarProducto" prefHeight="40.0" prefWidth="145.0" styleClass="btn-outline" text="Actualizar" GridPane.rowIndex="1" />
+                              <Button mnemonicParsing="false" onAction="#onEliminarProducto" prefHeight="40.0" prefWidth="145.0" styleClass="btn-outline" text="Eliminar" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onListarProductos" prefHeight="40.0" styleClass="btn-outline" text="Listar" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </children>
             </HBox>
          </children>
       </VBox>

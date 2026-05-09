@@ -1,8 +1,8 @@
 package org.example.ui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -11,33 +11,17 @@ import javafx.stage.Stage;
 public class MainController {
 
     @FXML
-    private Button btnProductos;
+    private Button btnEntrar;
 
     @FXML
-    private Button btnClientes;
-
-    @FXML
-    private Button btnPedidos;
-
-    @FXML
-    private void onAbrirProductos() {
-        abrirVista("/org/example/ui/ProductView.fxml", "Productos", btnProductos);
-    }
-
-    @FXML
-    private void onAbrirClientes() {
-        abrirVista("/org/example/ui/ClientView.fxml", "Clientes", btnClientes);
-    }
-
-    @FXML
-    private void onAbrirPedidos() {
-        abrirVista("/org/example/ui/OrderView.fxml", "Pedidos", btnPedidos);
+    private void onEntrar() {
+        abrirVista("/org/example/ui/ProductView.fxml", "Productos", btnEntrar);
     }
 
     private void abrirVista(String rutaFxml, String titulo, Node origen) {
         try {
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource(rutaFxml));
-            Scene scene = new Scene(fxml.load());
+            Parent root = FxmlUtil.loadRoot(rutaFxml);
+            Scene scene = new Scene(root);
 
             Stage stage = (Stage) origen.getScene().getWindow();
             WindowUtil.applyWindowSettings(stage, scene, titulo);
@@ -45,7 +29,7 @@ public class MainController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("No se pudo abrir la vista: " + titulo);
-            alert.setContentText(e.getMessage());
+            alert.setContentText(FxmlUtil.causaCadena(e));
             alert.showAndWait();
         }
     }

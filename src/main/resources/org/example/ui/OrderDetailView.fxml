@@ -13,17 +13,21 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="550.0" prefWidth="1050.0" stylesheets="@styles/sidebar.css" xmlns="http://javafx.com/javafx/23.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.OrderDetailController">
+<BorderPane prefHeight="1162.0" prefWidth="2114.0" stylesheets="@styles/sidebar.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ui.OrderDetailController">
    <left>
-      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="558.0" prefWidth="210.0" spacing="18.0" style="-fx-background-color: black;" BorderPane.alignment="TOP_LEFT">
+      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="558.0" prefWidth="210.0" spacing="40.0" style="-fx-background-color: black;" BorderPane.alignment="TOP_LEFT">
          <children>
-            <ImageView fitHeight="78.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/logo.png" />
                </image>
+               <VBox.margin>
+                  <Insets bottom="50.0" right="5.0" top="-10.0" />
+               </VBox.margin>
             </ImageView>
             <Button mnemonicParsing="false" onAction="#onIrInicio" prefHeight="52.0" prefWidth="170.0" styleClass="sidebar-button" text="Inicio" />
             <Button mnemonicParsing="false" onAction="#onIrProductos" prefHeight="52.0" prefWidth="170.0" styleClass="sidebar-button" text="Productos" />
@@ -31,115 +35,229 @@
             <Button mnemonicParsing="false" onAction="#onIrPedidos" prefHeight="52.0" prefWidth="170.0" styleClass="sidebar-button" text="Pedidos" />
          </children>
          <padding>
-            <Insets bottom="30.0" left="20.0" right="20.0" top="165.0" />
+            <Insets bottom="30.0" left="20.0" right="20.0" top="50.0" />
          </padding>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
       </VBox>
    </left>
-   <center>
-      <VBox spacing="14.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label managed="false" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="DETALLE DEL PEDIDO" translateY="-150.0" />
-            <GridPane hgap="26.0" managed="false" maxWidth="1.7976931348623157E308" translateY="-110.0" vgap="12.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="240.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="240.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Pedido ID:" />
-                  <Label fx:id="lblPedidoId" style="-fx-font-size: 20px;" GridPane.columnIndex="1" />
-                  <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Fecha:" GridPane.columnIndex="2" />
-                  <Label fx:id="lblFecha" style="-fx-font-size: 20px;" GridPane.columnIndex="3" />
-                  <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Cliente:" GridPane.rowIndex="1" />
-                  <Label fx:id="lblCliente" style="-fx-font-size: 20px;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Ciudad:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Label fx:id="lblCiudad" style="-fx-font-size: 20px;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-               </children>
-            </GridPane>
-            <TableView fx:id="tablaDetalle" maxWidth="1.7976931348623157E308" prefHeight="220.0" prefWidth="760.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-control-inner-background-alt: transparent; -fx-background-insets: 0; -fx-padding: 0; -fx-text-background-color: black; -fx-font-size: 24px; -fx-table-cell-border-color: transparent;">
-               <columns>
-                  <TableColumn fx:id="colProductoId" prefWidth="100.0" text="ID Producto" />
-                  <TableColumn fx:id="colProducto" prefWidth="300.0" text="Producto" />
-                  <TableColumn fx:id="colCantidad" prefWidth="100.0" text="Cantidad" />
-                  <TableColumn fx:id="colPrecio" prefWidth="120.0" text="Precio" />
-                  <TableColumn fx:id="colTotal" prefWidth="140.0" text="Total" />
-               </columns>
-            </TableView>
-            <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" spacing="20.0">
-               <children>
-                  <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Total cantidad:" />
-                  <Label fx:id="lblTotalCantidad" style="-fx-font-size: 18px;" text="0" />
-                  <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Total pedido:" />
-                  <Label fx:id="lblTotalPedido" style="-fx-font-size: 18px;" text="0.00" />
-               </children>
-            </HBox>
-         </children>
-         <padding>
-            <Insets left="20.0" right="10.0" />
-         </padding>
-         <BorderPane.margin>
-            <Insets top="395.0" />
-         </BorderPane.margin>
-      </VBox>
-   </center>
-   <right>
-      <VBox prefHeight="470.0" prefWidth="650.0" spacing="34.0" BorderPane.alignment="CENTER">
-         <children>
-            <GridPane alignment="CENTER" hgap="24.0" prefHeight="180.0" prefWidth="560.0" vgap="14.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 20px;" text="Producto:" />
-                  <ComboBox fx:id="cmbProducto" prefHeight="46.0" prefWidth="300.0" style="-fx-font-size: 20px;" GridPane.columnIndex="1" />
-                  <Label prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 20px;" text="Cantidad:" GridPane.rowIndex="1" />
-                  <TextField fx:id="txtCantidad" prefHeight="46.0" prefWidth="300.0" style="-fx-font-size: 20px;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-               </children>
-               <padding>
-                  <Insets left="22.0" right="18.0" />
-               </padding>
-            </GridPane>
-            <GridPane alignment="CENTER" hgap="18.0" prefHeight="210.0" prefWidth="560.0" vgap="14.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#onAnadirProducto" prefHeight="56.0" prefWidth="200.0" style="-fx-font-size: 18px;" text="Añadir producto" />
-                  <Button mnemonicParsing="false" onAction="#onEliminarProducto" prefHeight="56.0" prefWidth="200.0" style="-fx-font-size: 18px;" text="Eliminar producto" GridPane.columnIndex="1" />
-                  <Button mnemonicParsing="false" onAction="#onVolverPedidos" prefHeight="56.0" prefWidth="200.0" style="-fx-font-size: 18px;" text="Volver" GridPane.rowIndex="1" />
-               </children>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="210.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="210.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <padding>
-                  <Insets left="14.0" right="14.0" />
-               </padding>
-            </GridPane>
-         </children>
-         <padding>
-            <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
-         </padding>
-         <BorderPane.margin>
-            <Insets top="395.0" />
-         </BorderPane.margin>
-      </VBox>
-   </right>
    <padding>
       <Insets right="25.0" />
    </padding>
+   <center>
+      <VBox spacing="18.0" styleClass="product-main" stylesheets="@styles/product-view.css" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="16.0" styleClass="detail-order-header">
+               <children>
+                  <VBox spacing="6.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                           <children>
+                              <Label fx:id="lblTituloPedido" styleClass="product-title" text="Pedido #" />
+                              <Label fx:id="lblBadgeEstado" styleClass="status-badge" text="Activo" />
+                           </children>
+                        </HBox>
+                        <Label fx:id="lblSubtituloFecha" styleClass="product-subtitle" text="—" />
+                     </children>
+                  </VBox>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#onImprimir" styleClass="btn-outline" text="Imprimir" />
+                        <Button mnemonicParsing="false" onAction="#onDescargar" styleClass="btn-outline" text="Descargar" />
+                        <Button mnemonicParsing="false" onAction="#onMasAcciones" styleClass="btn-primary" text="Más acciones" />
+                        <Button mnemonicParsing="false" onAction="#onVolverPedidos" styleClass="btn-outline" text="Volver" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox spacing="12.0" styleClass="detail-cards-row">
+               <children>
+                  <VBox maxWidth="Infinity" spacing="8.0" styleClass="detail-info-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="detail-card-title" text="Cliente" />
+                        <Label fx:id="lblCardClienteNombre" styleClass="detail-card-strong" text="—" />
+                        <Label fx:id="lblCardClienteEmail" styleClass="detail-muted" text="—" />
+                        <Label fx:id="lblCardClienteTel" styleClass="detail-muted-small" text="—" />
+                        <Button mnemonicParsing="false" onAction="#onVerCliente" prefHeight="34.0" styleClass="btn-outline" text="Ver cliente" />
+                     </children>
+                  </VBox>
+                  <VBox maxWidth="Infinity" spacing="8.0" styleClass="detail-info-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="detail-card-title" text="Método de pago" />
+                        <Label fx:id="lblMetodoPago" styleClass="detail-card-strong" text="—" />
+                        <Label fx:id="lblMetodoPagoDetalle" styleClass="detail-muted" text="—" />
+                        <Region prefHeight="8.0" />
+                        <Button mnemonicParsing="false" onAction="#onVerPago" prefHeight="34.0" styleClass="btn-outline" text="Ver pago" />
+                     </children>
+                  </VBox>
+                  <VBox maxWidth="Infinity" spacing="8.0" styleClass="detail-info-card" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="detail-card-title" text="Método de envío" />
+                        <Label fx:id="lblMetodoEnvio" styleClass="detail-card-strong" text="—" />
+                        <Label fx:id="lblMetodoEnvioDetalle" styleClass="detail-muted" text="—" />
+                        <Region prefHeight="8.0" />
+                        <Button mnemonicParsing="false" onAction="#onVerEnvio" prefHeight="34.0" styleClass="btn-outline" text="Ver envío" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox spacing="14.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="lblProductosHeading" styleClass="panel-side-title" text="Productos (0)" />
+                        <VBox alignment="TOP_CENTER" spacing="0.0" styleClass="product-card product-table-panel" VBox.vgrow="ALWAYS">
+                           <children>
+                              <TableView fx:id="tablaDetalle" maxHeight="1.7976931348623157E308" minHeight="200.0" style="-fx-background-color: white; -fx-control-inner-background: white; -fx-control-inner-background-alt: #fafafa;" VBox.vgrow="ALWAYS">
+                                 <columns>
+                                    <TableColumn fx:id="colProducto" prefWidth="280.0" text="Producto" />
+                                    <TableColumn fx:id="colPrecio" prefWidth="120.0" text="Precio unit." />
+                                    <TableColumn fx:id="colCantidad" prefWidth="100.0" text="Cantidad" />
+                                    <TableColumn fx:id="colTotal" prefWidth="130.0" text="Subtotal" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+                        <HBox alignment="TOP_CENTER" spacing="20.0">
+                           <children>
+                              <VBox spacing="12.0" styleClass="product-card timeline-card">
+                                 <children>
+                                    <Label styleClass="timeline-title" text="Historial del pedido" />
+                                    <HBox alignment="TOP_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label styleClass="timeline-check" text="*" />
+                                          <VBox spacing="2.0">
+                                             <children>
+                                                <Label styleClass="timeline-step-title" text="Pedido creado" />
+                                                <Label fx:id="lblHist1" styleClass="timeline-step-time" text="—" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="TOP_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label styleClass="timeline-check" text="*" />
+                                          <VBox spacing="2.0">
+                                             <children>
+                                                <Label styleClass="timeline-step-title" text="Pago confirmado" />
+                                                <Label fx:id="lblHist2" styleClass="timeline-step-time" text="—" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="TOP_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label styleClass="timeline-check" text="*" />
+                                          <VBox spacing="2.0">
+                                             <children>
+                                                <Label styleClass="timeline-step-title" text="Pedido procesado" />
+                                                <Label fx:id="lblHist3" styleClass="timeline-step-time" text="—" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="TOP_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label fx:id="lblHist4Check" styleClass="timeline-check" text="*" />
+                                          <VBox spacing="2.0">
+                                             <children>
+                                                <Label fx:id="lblHist4Title" styleClass="timeline-step-title" text="Pedido completado" />
+                                                <Label fx:id="lblHist4" styleClass="timeline-step-time" text="—" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <VBox alignment="TOP_RIGHT" spacing="6.0">
+                                 <children>
+                                    <HBox alignment="CENTER_RIGHT" spacing="12.0" styleClass="totals-line">
+                                       <children>
+                                          <Label styleClass="totals-label" text="Subtotal" />
+                                          <Label fx:id="lblSubtotal" styleClass="totals-value" text="0.00" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" spacing="12.0" styleClass="totals-line">
+                                       <children>
+                                          <Label styleClass="totals-label" text="Envío" />
+                                          <Label fx:id="lblEnvio" styleClass="totals-value" text="0.00" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" spacing="12.0" styleClass="totals-line">
+                                       <children>
+                                          <Label styleClass="totals-label" text="Descuento" />
+                                          <Label fx:id="lblDescuento" styleClass="totals-value" text="0.00" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" spacing="12.0" styleClass="totals-line">
+                                       <children>
+                                          <Label styleClass="totals-grand-label" text="Total" />
+                                          <Label fx:id="lblTotalGeneral" styleClass="totals-grand-value" text="0.00" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets top="8.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox maxWidth="380.0" minWidth="300.0" prefWidth="340.0" spacing="12.0">
+                     <children>
+                        <VBox spacing="10.0" styleClass="product-card">
+                           <children>
+                              <Label styleClass="panel-side-title" text="Resumen del pedido" />
+                              <Label fx:id="lblResumenEstado" styleClass="detail-muted" text="—" wrapText="true" />
+                              <Label fx:id="lblResumenFecha" styleClass="detail-muted-small" text="—" wrapText="true" />
+                              <Button mnemonicParsing="false" onAction="#onEditarNotas" prefHeight="34.0" styleClass="btn-outline" text="Editar notas" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="8.0" styleClass="product-card">
+                           <children>
+                              <Label styleClass="panel-side-title" text="Dirección de envío" />
+                              <Label fx:id="lblDirEnvio" styleClass="detail-muted" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="8.0" styleClass="product-card">
+                           <children>
+                              <Label styleClass="panel-side-title" text="Dirección de facturación" />
+                              <Label fx:id="lblDirFacturacion" styleClass="detail-muted" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="12.0" styleClass="product-card">
+                           <children>
+                              <Label styleClass="panel-side-title" text="Líneas del pedido" />
+                              <GridPane hgap="12.0" vgap="10.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="90.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label styleClass="product-form-label" text="Producto" />
+                                    <Label styleClass="product-form-label" text="Cantidad" GridPane.rowIndex="1" />
+                                    <ComboBox fx:id="cmbProducto" prefHeight="36.0" prefWidth="200.0" styleClass="dashboard-field" GridPane.columnIndex="1" />
+                                    <TextField fx:id="txtCantidad" prefHeight="36.0" prefWidth="200.0" styleClass="product-form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                 </children>
+                              </GridPane>
+                              <HBox spacing="10.0">
+                                 <children>
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAnadirProducto" prefHeight="38.0" styleClass="btn-primary" text="Añadir" HBox.hgrow="ALWAYS" />
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onEliminarProducto" prefHeight="38.0" styleClass="btn-outline" text="Quitar" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
 </BorderPane>

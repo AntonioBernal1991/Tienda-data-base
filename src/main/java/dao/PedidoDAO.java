@@ -240,6 +240,26 @@ public class PedidoDAO {
         }
     }
 
+    /**
+     * Devuelve el ID del cliente asociado al pedido, o null si no existe el pedido.
+     */
+    public Integer obtenerClienteIdPorPedido(int pedidoId) {
+        String sql = "SELECT cliente_id FROM pedidos WHERE id = ?";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, pedidoId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("cliente_id");
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            System.out.println("Error al obtener cliente del pedido: " + e.getMessage());
+            throw new RuntimeException("Error al obtener cliente del pedido: " + e.getMessage(), e);
+        }
+    }
+
     public List<PedidoDetalleView> listarDetallePorPedido(int pedidoId) {
         List<PedidoDetalleView> lista = new ArrayList<>();
         String sql = """

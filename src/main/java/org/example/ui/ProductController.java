@@ -2,10 +2,13 @@ package org.example.ui;
 
 import dao.ProductoDAO;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -43,7 +46,25 @@ public class ProductController {
     @FXML
     private TextField txtId;
 
+    @FXML
+    private TextField txtBuscar;
+
+    @FXML
+    private Label lblKpiTotal;
+
+    @FXML
+    private Label lblKpiConStock;
+
+    @FXML
+    private Label lblKpiSinStock;
+
+    @FXML
+    private Label lblKpiValor;
+
     private final ProductoDAO productoDAO = new ProductoDAO();
+
+    private final ObservableList<Producto> todosLosProductos = FXCollections.observableArrayList();
+    private FilteredList<Producto> productosFiltrados;
 
     @FXML
     private void initialize() {
@@ -53,7 +74,40 @@ public class ProductController {
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
 
+        productosFiltrados = new FilteredList<>(todosLosProductos, p -> true);
+        tablaProductos.setItems(productosFiltrados);
+
+        txtBuscar.textProperty().addListener((obs, oldVal, newVal) -> aplicarFiltroBusqueda(newVal));
+
         cargarProductos();
+    }
+
+    private void aplicarFiltroBusqueda(String consulta) {
+        String needle = consulta == null ? "" : consulta.trim().toLowerCase();
+        productosFiltrados.setPredicate(p -> {
+            if (needle.isEmpty()) {
+                return true;
+            }
+            if (p.getNombre() != null && p.getNombre().toLowerCase().contains(needle)) {
+                return true;
+            }
+            return String.valueOf(p.getId()).contains(needle);
+        });
+    }
+
+    @FXML
+    private void onExportar() {
+        Alert info = new Alert(Alert.AlertType.INFORMATION);
+        info.setTitle("Exportar");
+        info.setHeaderText(null);
+        info.setContentText("Exportación a archivo no está implementada en esta versión de demo.");
+        info.showAndWait();
+    }
+
+    @FXML
+    private void onNuevoProducto() {
+        limpiarCampos();
+        txtNombre.requestFocus();
     }
 
     @FXML
@@ -88,8 +142,8 @@ public class ProductController {
 
     private void abrirVista(String rutaFxml, String titulo) {
         try {
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource(rutaFxml));
-            Scene scene = new Scene(fxml.load());
+            Parent root = FxmlUtil.loadRoot(rutaFxml);
+            Scene scene = new Scene(root);
 
             Stage stage = (Stage) tablaProductos.getScene().getWindow();
             WindowUtil.applyWindowSettings(stage, scene, titulo);
@@ -97,7 +151,7 @@ public class ProductController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("No se pudo abrir la vista: " + titulo);
-            alert.setContentText(e.getMessage());
+            alert.setContentText(FxmlUtil.causaCadena(e));
             alert.showAndWait();
         }
     }
@@ -297,7 +351,8 @@ public class ProductController {
     private void cargarProductos() {
         try {
             List<Producto> productos = productoDAO.listarProductos();
-            tablaProductos.setItems(FXCollections.observableArrayList(productos));
+            todosLosProductos.setAll(productos);
+            actualizarKpis(productos);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -305,6 +360,16 @@ public class ProductController {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    private void actualizarKpis(List<Producto> list) {
+        lblKpiTotal.setText(String.valueOf(list.size()));
+        long conStock = list.stream().filter(p -> p.getStock() > 0).count();
+        lblKpiConStock.setText(String.valueOf(conStock));
+        long sinStock = list.stream().filter(p -> p.getStock() <= 0).count();
+        lblKpiSinStock.setText(String.valueOf(sinStock));
+        double valor = list.stream().mapToDouble(p -> p.getPrecio() * p.getStock()).sum();
+        lblKpiValor.setText(String.format("%.2f €", valor));
     }
 
     private void limpiarCampos() {

@@ -2,10 +2,13 @@ package org.example.ui;
 
 import dao.ClienteDAO;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -44,7 +47,25 @@ public class ClientController {
     @FXML
     private TextField txtId;
 
+    @FXML
+    private TextField txtBuscar;
+
+    @FXML
+    private Label lblKpiTotal;
+
+    @FXML
+    private Label lblKpiConCiudad;
+
+    @FXML
+    private Label lblKpiSinCiudad;
+
+    @FXML
+    private Label lblKpiCiudades;
+
     private final ClienteDAO clienteDAO = new ClienteDAO();
+
+    private final ObservableList<Cliente> todosLosClientes = FXCollections.observableArrayList();
+    private FilteredList<Cliente> clientesFiltrados;
 
     @FXML
     private void initialize() {
@@ -54,7 +75,50 @@ public class ClientController {
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colCiudad.setCellValueFactory(new PropertyValueFactory<>("ciudad"));
 
+        clientesFiltrados = new FilteredList<>(todosLosClientes, p -> true);
+        tablaClientes.setItems(clientesFiltrados);
+
+        txtBuscar.textProperty().addListener((obs, oldVal, newVal) -> aplicarFiltroBusqueda(newVal));
+
         cargarClientes();
+    }
+
+    private void aplicarFiltroBusqueda(String consulta) {
+        String needle = consulta == null ? "" : consulta.trim().toLowerCase();
+        clientesFiltrados.setPredicate(c -> {
+            if (needle.isEmpty()) {
+                return true;
+            }
+            if (Integer.toString(c.getId()).contains(needle)) {
+                return true;
+            }
+            if (contiene(c.getNombre(), needle)) {
+                return true;
+            }
+            if (contiene(c.getEmail(), needle)) {
+                return true;
+            }
+            return contiene(c.getCiudad(), needle);
+        });
+    }
+
+    private static boolean contiene(String texto, String needle) {
+        return texto != null && texto.toLowerCase().contains(needle);
+    }
+
+    @FXML
+    private void onExportar() {
+        Alert info = new Alert(Alert.AlertType.INFORMATION);
+        info.setTitle("Exportar");
+        info.setHeaderText(null);
+        info.setContentText("Exportación a archivo no está implementada en esta versión de demo.");
+        info.showAndWait();
+    }
+
+    @FXML
+    private void onNuevoCliente() {
+        limpiarCampos();
+        txtNombre.requestFocus();
     }
 
     @FXML
@@ -89,8 +153,8 @@ public class ClientController {
 
     private void abrirVista(String rutaFxml, String titulo) {
         try {
-            FXMLLoader fxml = new FXMLLoader(getClass().getResource(rutaFxml));
-            Scene scene = new Scene(fxml.load());
+            Parent root = FxmlUtil.loadRoot(rutaFxml);
+            Scene scene = new Scene(root);
 
             Stage stage = (Stage) tablaClientes.getScene().getWindow();
             WindowUtil.applyWindowSettings(stage, scene, titulo);
@@ -98,7 +162,7 @@ public class ClientController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("No se pudo abrir la vista: " + titulo);
-            alert.setContentText(e.getMessage());
+            alert.setContentText(FxmlUtil.causaCadena(e));
             alert.showAndWait();
         }
     }
@@ -213,7 +277,8 @@ public class ClientController {
     private void cargarClientes() {
         try {
             List<Cliente> clientes = clienteDAO.listarClientes();
-            tablaClientes.setItems(FXCollections.observableArrayList(clientes));
+            todosLosClientes.setAll(clientes);
+            actualizarKpis(clientes);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -221,6 +286,28 @@ public class ClientController {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    private void actualizarKpis(List<Cliente> list) {
+        lblKpiTotal.setText(String.valueOf(list.size()));
+
+        long conCiudad = list.stream().filter(ClientController::tieneCiudadInformada).count();
+        lblKpiConCiudad.setText(String.valueOf(conCiudad));
+
+        long sinCiudad = list.stream().filter(c -> !tieneCiudadInformada(c)).count();
+        lblKpiSinCiudad.setText(String.valueOf(sinCiudad));
+
+        long ciudadesDistintas = list.stream()
+                .filter(ClientController::tieneCiudadInformada)
+                .map(c -> c.getCiudad().trim().toLowerCase())
+                .distinct()
+                .count();
+        lblKpiCiudades.setText(String.valueOf(ciudadesDistintas));
+    }
+
+    private static boolean tieneCiudadInformada(Cliente c) {
+        String ci = c.getCiudad();
+        return ci != null && !ci.trim().isEmpty();
     }
 
     private void limpiarCampos() {
